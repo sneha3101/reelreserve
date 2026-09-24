@@ -2,6 +2,129 @@
   opacity: 0.2;
 }
 
+.booking-page {
+  min-height: calc(100vh - 78px);
+  background:
+    radial-gradient(circle at 17% 34%, rgba(203, 104, 73, .07), transparent 25%),
+    var(--paper);
+}
+
+.booking-head {
+  position: relative;
+}
+
+.booking-head::after {
+  content: '02 / 02  SEAT SELECTION';
+  position: absolute;
+  left: 0;
+  bottom: 12px;
+  color: var(--muted);
+  font: 9px var(--mono);
+  letter-spacing: 1.2px;
+}
+
+.booking-head h1 {
+  max-width: 680px;
+  font-size: clamp(40px, 5vw, 64px);
+  letter-spacing: -3px;
+}
+
+.booking-head .hold-note {
+  padding: 11px 13px;
+  border: 1px solid #d6e2d7;
+  background: #edf4ee;
+}
+
+.seat-map-panel {
+  padding: 34px 34px 28px;
+  background: rgba(250, 248, 244, .66);
+  border: 1px solid var(--line);
+}
+
+.screen {
+  position: relative;
+  width: 78%;
+  height: 38px;
+  margin-bottom: 54px;
+  border-top: 4px solid #aaa69e;
+  filter: drop-shadow(0 7px 5px rgba(203, 104, 73, .12));
+}
+
+.screen::after {
+  content: '';
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: -4px;
+  height: 35px;
+  background: linear-gradient(180deg, rgba(255,255,255,.4), transparent);
+  opacity: .7;
+  pointer-events: none;
+}
+
+.seat-row {
+  gap: 11px;
+  margin-bottom: 13px;
+}
+
+.seat {
+  position: relative;
+  width: 42px;
+  height: 34px;
+  border: 1px solid transparent;
+  box-shadow: inset 0 -2px rgba(23, 24, 26, .05);
+}
+
+.seat:not(.taken):hover {
+  border-color: var(--rust);
+  transform: translateY(-3px);
+}
+
+.seat.selected {
+  box-shadow: 0 5px 13px rgba(203, 104, 73, .28);
+}
+
+.summary-panel {
+  position: relative;
+  border-top: 4px solid var(--rust);
+  box-shadow: 0 18px 40px rgba(23, 24, 26, .07);
+}
+
+.summary-panel h2 {
+  font-size: 23px;
+  letter-spacing: -1px;
+}
+
+.summary-panel .chosen-seats {
+  background: rgba(244, 241, 235, .7);
+  padding: 14px;
+  min-height: 74px;
+}
+
+.summary-panel .primary-button {
+  min-height: 48px;
+}
+
+@media (max-width: 760px) {
+  .seat-map-panel {
+    padding: 24px 12px;
+  }
+
+  .seat-row {
+    gap: 6px;
+  }
+
+  .seat {
+    width: 34px;
+  }
+
+  .booking-head::after {
+    position: static;
+    display: block;
+    margin-top: 22px;
+  }
+}
+
 .legend {
   display: flex;
   justify-content: center;
@@ -274,11 +397,42 @@
 
 .movie-card {
   padding-bottom: 4px;
+  position: relative;
+  padding: 12px 12px 18px;
+  background: rgba(250, 248, 244, .72);
+  border: 1px solid rgba(217, 212, 204, .7);
+  box-shadow: 0 12px 30px rgba(23, 24, 26, .04);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
 }
 
 .movie-card:hover .poster img {
   transform: scale(1.04);
   filter: saturate(.85);
+}
+
+.movie-card:hover {
+  transform: translateY(-6px);
+  background: var(--cream);
+  box-shadow: 0 20px 45px rgba(23, 24, 26, .1);
+}
+
+.movie-card .poster {
+  height: 310px;
+}
+
+.movie-card .movie-info {
+  padding-top: 20px;
+}
+
+.movie-card .movie-info h3 {
+  font-size: 19px;
+}
+
+.movie-card .price {
+  align-self: start;
+  padding: 7px 8px;
+  color: var(--rust);
+  background: #f3e4dc;
 }
 
 .poster img {

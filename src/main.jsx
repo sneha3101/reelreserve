@@ -58,7 +58,7 @@ function App() {
       if (!hold?.holdId) throw new Error('The seat hold could not be created. Please refresh and try again.')
       const bookingPayload = { ...holdPayload, holdId: hold.holdId }
       const result = await api('/api/bookings', { method: 'POST', headers: { 'Idempotency-Key': hold.holdId }, body: JSON.stringify(bookingPayload) })
-      setBooking(result); setView('success')
+      setBooking(result)
     } catch (problem) {
       setError(problem.message)
       if (problem.message.includes('seat') || problem.message.includes('hold')) {
@@ -71,6 +71,7 @@ function App() {
     {view === 'home' && <Home shows={shows} onSelect={openShow} />}
     {view === 'seats' && <SeatPicker show={selectedShow} occupied={occupied} selectedSeats={selectedSeats} toggleSeat={toggleSeat} onBack={() => setView('home')} onConfirm={confirmBooking} bookingInProgress={bookingInProgress} error={error} />}
     {view === 'success' && <BookingSuccess booking={booking} show={selectedShow} onHome={() => setView('home')} />}
+    {booking && view === 'seats' && <BookingConfirmationModal booking={booking} show={selectedShow} onClose={() => { setBooking(null); setSelectedSeats([]); setView('home') }} />}
     {view === 'admin' && <Admin user={user} onLogin={result => setUser(result.user)} />}
     {error && view === 'home' && <div className="toast"><X size={16} /> {error}</div>}
     {loginOpen && <Login onClose={() => setLoginOpen(false)} onLogin={result => { localStorage.setItem('reelreserve-token', result.token); setUser(result.user); setLoginOpen(false) }} />}
@@ -127,6 +128,21 @@ function SeatPickerLegacy({ show, occupied, selectedSeats, toggleSeat, onBack, o
 }
 
 function BookingSuccess({ booking, show, onHome }) { return <main className="success-page"><div className="success-card"><div className="success-icon"><Check size={27} /></div><p className="eyebrow">YOUR SEAT IS BOOKED</p><h1>You're going to<br /><em>{show.title}</em></h1><p className="success-copy">Your seat is booked and secured. Show this reference at the counter when you arrive.</p><div className="confirmation"><span>REFERENCE</span><strong>{booking.id}</strong><div><span>{show.date} · {show.time}</span><span>{booking.seats.join(' · ')} · {show.theatre}</span></div></div><button className="primary-button" onClick={onHome}>Browse more films <ArrowRight size={17} /></button></div></main> }
+
+function BookingConfirmationModal({ booking, show, onClose }) {
+  return <div className="booking-modal-backdrop" role="dialog" aria-modal="true" aria-label="Booking confirmed">
+    <div className="booking-modal">
+      <button className="close-modal" onClick={onClose} aria-label="Close confirmation"><X size={18} /></button>
+      <div className="success-icon"><Check size={27} /></div>
+      <p className="eyebrow">BOOKING CONFIRMED</p>
+      <h2>Your seat is booked</h2>
+      <p className="modal-copy">Your reservation for <strong>{show.title}</strong> is confirmed.</p>
+      <div className="modal-details"><span>{show.date} · {show.time}</span><strong>{booking.seats.join(' · ')}</strong><span>{show.theatre}</span></div>
+      <div className="modal-reference"><span>REFERENCE</span><strong>{booking.id}</strong></div>
+      <button className="primary-button full" onClick={onClose}>Done <Check size={16} /></button>
+    </div>
+  </div>
+}
 
 function Admin({ user, onLogin }) {
   const [data, setData] = useState(null)
